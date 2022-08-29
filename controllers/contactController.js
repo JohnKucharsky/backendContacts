@@ -1,33 +1,33 @@
-const Workout = require("../models/WorkoutModel");
+const Contact = require("../models/ContactModel");
 const mongoose = require("mongoose");
 
-// get all workouts
-async function getWorkouts(req, res) {
+// get all contacts
+async function getContacts(req, res) {
   const user_id = req.user._id;
-  const workouts = await Workout.find({ user_id }).sort({ createdAt: -1 });
+  const contacts = await Contact.find({ user_id }).sort({ createdAt: -1 });
 
-  res.status(200).json(workouts);
+  res.status(200).json(contacts);
 }
 
 // get a single contact
 
-async function getWorkout(req, res) {
+async function getContact(req, res) {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
-    return res.status(404).json({ error: "No such workout" });
+    return res.status(404).json({ error: "No such contact" });
   }
 
-  const workout = await Workout.findById(id);
+  const contact = await Contact.findById(id);
 
-  if (!workout) {
+  if (!contact) {
     return res.status(404).json({ error: "No such contact" });
   }
   res.status(200).json(contact);
 }
 
 // create new contact
-async function createWorkout(req, res) {
+async function createContact(req, res) {
   const { name, second_name, email } = req.body;
   let emptyFields = [];
 
@@ -48,57 +48,57 @@ async function createWorkout(req, res) {
   // add doc to db
   try {
     const user_id = req.user._id;
-    const workout = await Workout.create({ name, second_name, email, user_id });
-    res.status(200).json(workout);
+    const contact = await Contact.create({ name, second_name, email, user_id });
+    res.status(200).json(contact);
   } catch (error) {
     res.status(400).json({ error: error.message });
   }
 }
 
-// delete a workout
-async function deletewWorkout(req, res) {
+// delete a contact
+async function deleteContact(req, res) {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: "No such contact" });
   }
 
-  const workout = await Workout.findOneAndDelete({ _id: id });
+  const contact = await Contact.findOneAndDelete({ _id: id });
 
-  if (!workout) {
+  if (!contact) {
     return res.status(400).json({ error: "No such contact" });
   }
 
-  res.status(200).json(workout);
+  res.status(200).json(contact);
 }
 
-// update a workout
+// update a contact
 
-async function updateWorkout(req, res) {
+async function updateContact(req, res) {
   const { id } = req.params;
 
   if (!mongoose.Types.ObjectId.isValid(id)) {
     return res.status(400).json({ error: "No such contact" });
   }
 
-  const workout = await Workout.findOneAndUpdate(
+  const contact = await Contact.findOneAndUpdate(
     { _id: id },
     {
       ...req.body,
     },
   );
 
-  if (!workout) {
+  if (!contact) {
     return res.status(400).json({ error: "No such contact" });
   }
 
-  res.status(200).json(workout);
+  res.status(200).json(contact);
 }
 
 module.exports = {
-  createWorkout,
-  getWorkout,
-  getWorkouts,
-  deletewWorkout,
-  updateWorkout,
+  getContacts,
+  getContact,
+  createContact,
+  deleteContact,
+  updateContact,
 };
