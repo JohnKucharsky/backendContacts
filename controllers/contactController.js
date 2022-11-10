@@ -86,6 +86,7 @@ async function updateContact(req, res) {
     {
       ...req.body,
     },
+    {new:true}
   );
 
   if (!contact) {
